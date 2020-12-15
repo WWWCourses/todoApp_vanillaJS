@@ -2,7 +2,7 @@
   "todos": [
     {
       "id": 1,
-      "title": "Learn ",
+      "title": "Learn HTML",
       "completed": false
     },
     {
@@ -14,11 +14,6 @@
       "id": 3,
       "title": "Learn JavaScript",
       "completed": false
-    },
-    {
-      "title": "test json server",
-      "completed": false,
-      "id": 4
     }
   ]
 }

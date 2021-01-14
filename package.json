@@ -8,7 +8,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run startJSONServer && npm run startLiveServer",
+    "startJSONServer": "nohup ./node_modules/.bin/json-server --watch db.json --port=3001 &",
+    "startLiveServer": "nohup live-server ./src &"
   },
   "repository": {
     "type": "git",

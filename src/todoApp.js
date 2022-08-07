@@ -35,6 +35,8 @@ const addTodo = function addTodo() {
 	// get the input text
 	const todoText = nodes.addTodoInput.value;
 
+	// TODO: do not addTodo on empty input
+
 	// create the new todo object
 	const newTodo = {
 		"id": todos[todos.length-1]?.id +1 || 1, // in real app will be done by the server
@@ -77,7 +79,7 @@ const nodes = {
 	'totalItemsCount': document.querySelector('.todo-app .todos-total>.output')
 }
 
-// inint local todos (state)
+// initial todos (local state)
 let todos = [
 	{
 		id:1,
@@ -94,7 +96,6 @@ window.addEventListener('DOMContentLoaded', function (e) {
 });
 
 //// add Todo Item
-// TODO: do not addTodo on empty input
 // on Add button click
 nodes.addTodoBtn.addEventListener('click', function (e) {
 	addTodo();
@@ -106,21 +107,19 @@ nodes.addTodoInput.addEventListener('keypress', function(e) {
 	}
 })
 
-
+// on remove or completed:
 nodes.todoItems.addEventListener('click', function todoItemsClickHandler(e) {
-	console.dir(e.target);
-	if( e.target.classList.contains('fa-trash-alt')){
-		const li = e.target.parentElement.parentElement
-		const id = li.dataset.id*1;
+	// console.dir(e.target);
 
+	// get the LI element which contains the icon being clicked on, inorder to get the id of the todo (check HTML in renderTodos() to see the structure)
+	const li = e.target.parentElement.parentElement
+	const id = li.dataset.id*1;
+
+	if( e.target.classList.contains('fa-trash-alt')){
+		// if user have clicked the trash icon:
 		removeTodo(id)
 	}else if( e.target.classList.contains('fa-check-square')|| e.target.classList.contains('fa-square')){
-		const li = e.target.parentElement.parentElement
-		const id = li.dataset.id*1;
-
+		// if user have clicked the completed icon:
 		toggleComplete(id)
-		e.preventDefault()
-	}else{
-		e.preventDefault()
 	}
 })

@@ -13,7 +13,7 @@ const renderTodos = function renderTodos(todos) {
 	// add todo item at the end
 	todos.forEach( todo => {
 		nodes.todoItems.innerHTML += `
-		<li data-id=${todo.id} class="${todo.completed?'completed':''}">
+		<li data-color='red' data-id=${todo.id} class="${todo.completed?'completed':''}">
 			<span class="todoID">${todo.id}.</span>
 			<span>${todo.title}</span>
 			<div class="todo-remove"><i class="far fa-trash-alt"></i></div>
@@ -30,6 +30,7 @@ const renderTodos = function renderTodos(todos) {
 
 	displayTodoItemsCount(todos);
 }
+
 
 const addTodo = function addTodo() {
 	// get the input text
@@ -79,14 +80,34 @@ const nodes = {
 	'totalItemsCount': document.querySelector('.todo-app .todos-total>.output')
 }
 
+
+
 // initial todos (local state)
 let todos = [
 	{
-		id:1,
-		title:'Todo1',
-		completed: false
+	  "userId": 1,
+	  "id": 1,
+	  "title": "delectus aut autem",
+	  "completed": false
 	}
 ];
+
+// get data from json server:
+const url = 'https://jsonplaceholder.typicode.com/todos';
+
+fetch(url)
+	.then( response=> {
+		console.log(response.status);
+		if(response.ok){
+			console.log(`response`);
+			return response.json()
+		}else{
+			throw Error('No data')
+		}
+
+	} )
+	.then( data => console.dir(data) )
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // attach events
@@ -112,8 +133,12 @@ nodes.todoItems.addEventListener('click', function todoItemsClickHandler(e) {
 	// console.dir(e.target);
 
 	// get the LI element which contains the icon being clicked on, inorder to get the id of the todo (check HTML in renderTodos() to see the structure)
-	const li = e.target.parentElement.parentElement
+	const li = e.target.parentElement.parentElement;
+
+	console.dir(li.dataset.color)
+
 	const id = li.dataset.id*1;
+
 
 	if( e.target.classList.contains('fa-trash-alt')){
 		// if user have clicked the trash icon:

@@ -1,7 +1,13 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // define variables and functions
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const displayTodoItemsCount = function displayTodoItemsCount(todos) {
+
+interface Todo{
+	'id':number,
+	'title':string,
+	'completed':boolean
+}
+const displayTodoItemsCount = function displayTodoItemsCount(todos:Todo[]):void {
 	let count = todos.length || 0;
 	nodes.totalItemsCount.innerHTML = count;
 }

@@ -1,0 +1,12 @@
+{
+  "name": "todoapp_vanillajs",
+  "version": "1.0.0",
+  "description": "For labs demos",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

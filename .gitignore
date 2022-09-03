@@ -17,5 +17,5 @@ package-lock.json
 .sass-cache
 
 # db.json should be ignored (i.e. uncomment next line), after repo is clonned
-# db.json
+db.json
 

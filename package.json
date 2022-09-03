@@ -1,0 +1,32 @@
+{
+  "name": "todoapp_vanillajs",
+  "version": "1.0.0",
+  "description": "Simple TodoApp for learning purposes",
+  "main": "todoApp.js",
+  "scripts": {
+    "start-json-server": "npx json-server --watch db.json --port 3000",
+    "start-live-server": "npx live-server --port=5000 ./src/",
+    "dev": "concurrently \"npm run start-json-server\" \"npm run start-live-server\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WWWCourses/todoApp_vanillaJS.git"
+  },
+  "keywords": [
+    "todoApp",
+    "vanilla",
+    "JS"
+  ],
+  "author": "Iva E. Popova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WWWCourses/todoApp_vanillaJS/issues"
+  },
+  "homepage": "https://github.com/WWWCourses/todoApp_vanillaJS#readme",
+  "devDependencies": {
+    "concurrently": "^7.3.0",
+    "json-server": "^0.17.0",
+    "live-server": "^1.2.2"
+  }
+}

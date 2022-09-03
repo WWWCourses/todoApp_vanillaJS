@@ -32,53 +32,112 @@ const renderTodos = function renderTodos(todos) {
 }
 
 
+const fetchAndRenderTodos = function fetchAndRenderTodos(APIRoot) {
+	fetch(APIRoot)
+		.then(r=>{
+			if(r.ok){
+				return r.json()
+			}
+		})
+		.then(data=> {
+			todos = data;
+			renderTodos(todos);
+		})
+		.catch( err=>console.warn(err) );
+}
+
+
 const addTodo = function addTodo() {
 	// get the input text
 	const todoText = nodes.addTodoInput.value;
 
 	// TODO: do not addTodo on empty input
 
-	// create the new todo object
+	// create the new todo object - no need to add id (server will set it)
 	const newTodo = {
-		"id": todos[todos.length-1]?.id +1 || 1, // in real app will be done by the server
 		"title": todoText,
 		"completed": false,
 	};
 
-	// change local state
-	todos = [...todos, newTodo];
-	console.log(`todos: ${todos}`);
-
-	// save todos to local storage
-	window.localStorage.setItem('todos', JSON.stringify(todos));
-
-	// update UI on state change:
-	renderTodos(todos);
+	// change server state and if success => change local state
+	fetch(APIRoot, {
+		method: 'POST',
+		body: JSON.stringify(newTodo),
+		headers: {
+			'Content-type': 'application/json; charset=UTF-8',
+		},
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw Error(response.statusText);
+		}
+		return response.json();
+	})
+	.then(data => {
+		// change local state
+		todos = [...todos, data];
+		// update UI on state change:
+		renderTodos(todos);
+	})
+	.catch( err=>console.error(`Ups, ${err}`) );
 }
+
 const removeTodo = function removeTodo(todoID) {
-	// change local state:
-	todos = todos.filter(todo=> todo.id !== todoID)
-
-	// save todos to local storage
-	window.localStorage.setItem('todos', JSON.stringify(todos));
-
-	// update UI on state change:
-	renderTodos(todos);
+	// change server state and if success => change local state
+	fetch(`${APIRoot}/${todoID}`,{
+		method: 'DELETE',
+		headers:{
+			"Content-Type":"application/json"
+		}
+	})
+	.then(response => {
+		if (!response.ok) {
+			throw Error(response.statusText);
+		}
+		return response.json();
+	})
+	.then(data => {
+		// change local state
+		todos = todos.filter(todo=> todo.id !== todoID)
+		// update UI on state change:
+		renderTodos(todos);
+	})
+	.catch( err=>console.error(`Ups, ${err}`) );
 }
 
 const toggleComplete = function toggleComplete(todoID) {
-	// console.log(`todoID: ${todoID}`);
 	//get todo object to be patched
 	let todo = todos.filter(todo=>todo.id===todoID)[0];
 
-	// change local state:
-	todo.completed = !todo.completed;
+	// make body payload - todo object to be patched
+	let payload = {
+		"completed": !todo.completed
+	}
 
-	// save todos to local storage
-	window.localStorage.setItem('todos', JSON.stringify(todos));
+	// change server state and if success => change local state
+	fetch(`${APIRoot}/${todoID}`,{
+		method: 'PATCH',
+		body: JSON.stringify(payload),
+		headers: {
+			'Content-type': 'application/json; charset=UTF-8',
+		},
+	})
+	.then(response=>{
+		if (!response.ok) {
+			throw Error(response.statusText);
+		}
 
-	// update UI on state change:
-	renderTodos(todos);
+		return response.json();
+	})
+	.then(data => {
+		// change local state:
+		todo.completed = !todo.completed;
+		// todos[todoID] = data
+
+		// update UI on state change:
+		renderTodos(todos);
+	})
+	.catch( err=>console.error(`Ups, ${err}`) );
 }
 
 
@@ -91,20 +150,19 @@ const nodes = {
 }
 
 
-// get data from local storage
-let todosValue = window.localStorage.getItem('todos');
-let todos = JSON.parse(todosValue) || [];
+const APIRoot = "http://localhost:3000/todos"
+
+// inint local todos (state)
+let todos = [];
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // attach events
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 window.addEventListener('DOMContentLoaded', function (e) {
-	renderTodos(todos)
+	fetchAndRenderTodos(APIRoot);
 });
 
 //// add Todo Item
-// TODO: do not addTodo on empty input
-
 // on Add button click
 nodes.addTodoBtn.addEventListener('click', function (e) {
 	addTodo();

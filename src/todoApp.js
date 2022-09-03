@@ -47,6 +47,10 @@ const addTodo = function addTodo() {
 
 	// change local state
 	todos = [...todos, newTodo];
+	console.log(`todos: ${todos}`);
+
+	// save todos to local storage
+	window.localStorage.setItem('todos', JSON.stringify(todos));
 
 	// update UI on state change:
 	renderTodos(todos);
@@ -54,6 +58,9 @@ const addTodo = function addTodo() {
 const removeTodo = function removeTodo(todoID) {
 	// change local state:
 	todos = todos.filter(todo=> todo.id !== todoID)
+
+	// save todos to local storage
+	window.localStorage.setItem('todos', JSON.stringify(todos));
 
 	// update UI on state change:
 	renderTodos(todos);
@@ -66,6 +73,9 @@ const toggleComplete = function toggleComplete(todoID) {
 
 	// change local state:
 	todo.completed = !todo.completed;
+
+	// save todos to local storage
+	window.localStorage.setItem('todos', JSON.stringify(todos));
 
 	// update UI on state change:
 	renderTodos(todos);
@@ -81,16 +91,9 @@ const nodes = {
 }
 
 
-
-// initial todos (local state)
-
-let todos = [
-	{
-	  "id": 1,
-	  "title": "delectus aut autem",
-	  "completed": false
-	}
-];
+// get data from local storage
+let todosValue = window.localStorage.getItem('todos');
+let todos = JSON.parse(todosValue) || [];
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // attach events

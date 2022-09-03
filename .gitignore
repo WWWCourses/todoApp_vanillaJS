@@ -1,0 +1,21 @@
+**/.tags*
+**/*fuse*
+**/*.log
+logs/**
+nohup*
+
+
+# all hidden files and folders, except...
+.*
+!.gitignore
+!.gitmodules
+!.design_notes
+!.bin
+
+**/node_modules/**
+package-lock.json
+.sass-cache
+
+# db.json should be ignored (i.e. uncomment next line), after repo is clonned
+db.json
+
